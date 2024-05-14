@@ -1,8 +1,7 @@
 
 import random
 import string
-# ALPHABET = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-# KEY = 3
+
 
 
 def caesar_encrypt(plain_text, key):
