@@ -144,7 +144,8 @@ if __name__ == '__main__':
     if args.listen: # or ((args.execute and args.upload)==None) or (args.command == False): 
         buffer = ''
     else:
-        buffer = sys.stdin.read()
+        # buffer = sys.stdin.read()
+        buffer = 'randome data'
  
     nc = NetCat(args, buffer.encode())
     print("here")
