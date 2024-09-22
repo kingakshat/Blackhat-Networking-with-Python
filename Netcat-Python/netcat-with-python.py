@@ -5,8 +5,7 @@ import subprocess
 import sys
 import textwrap
 import threading
-import time
-import random
+
 
 
 def execute(cmd):
@@ -144,9 +143,7 @@ if __name__ == '__main__':
     if args.listen: # or ((args.execute and args.upload)==None) or (args.command == False): 
         buffer = ''
     else:
-        # buffer = sys.stdin.read()
-        buffer = 'randome data'
+        buffer = sys.stdin.read()
  
     nc = NetCat(args, buffer.encode())
-    print("here")
     nc.run()
