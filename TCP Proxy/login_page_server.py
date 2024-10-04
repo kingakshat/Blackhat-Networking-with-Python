@@ -51,7 +51,7 @@ def server_loop(local_host, local_port):
 if __name__ == "__main__":
     # Define the server address and port
     local_host = "127.0.0.1"
-    local_port = 8080
+    local_port = 9000
     
     # Start the server
     server_loop(local_host, local_port)
