@@ -189,11 +189,11 @@ def add_iptables_rule():
         print(f"[!!] Failed to add iptables rule: {e}")
         sys.exit(1)
 
-def remove_iptables_rule():
+def remove_iptables_rule(remote_port, local_port):
     # Remove iptables rule to stop redirecting traffic from port 8080 to 9090
     try:
         subprocess.run(['sudo', 'iptables', '-t', 'nat', '-D', 'PREROUTING',
-                        '-p', 'tcp', '--dport', '8080', '-j', 'REDIRECT', '--to-port', '9090'],
+                        '-p', 'tcp', '--dport', remote_port, '-j', 'REDIRECT', '--to-port', local_port],
                        check=True)
         print("[*] iptables rule removed")
     except subprocess.CalledProcessError as e:
@@ -210,7 +210,7 @@ def main():
     if len(sys.argv[1:]) != 5:
         print("Usage: ./proxy.py [localhost] [localport]", end='')
         print("[remotehost] [remoteport] [receive_first]")
-        print("Example: ./proxy.py 127.0.0.1 900 10.12.132.1 9000 True")
+        print("Example: ./proxy.py 127.0.0.1 9000 10.12.132.1 9000 True")
         sys.exit(0)
     
     local_host = sys.argv[1]
@@ -225,7 +225,7 @@ def main():
         receive_first = False
     
     # Add the iptables rule on start
-    add_iptables_rule()
+    add_iptables_rule(remote_port, local_port)
     
     # Ensure iptables rule is removed when proxy stops
     signal.signal(signal.SIGINT, signal_handler)  # Capture CTRL+C
