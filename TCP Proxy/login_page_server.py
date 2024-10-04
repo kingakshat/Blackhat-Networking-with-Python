@@ -2,8 +2,8 @@ import socket
 import threading
 
 # Define login credentials
-VALID_USERNAME = "user"
-VALID_PASSWORD = "pass123"
+VALID_USERNAME = ["user", "attacker_user"]
+VALID_PASSWORD = ["pass123", "attacker_pass"]
 
 def handle_client(client_socket):
     # Send a welcome message
@@ -18,8 +18,10 @@ def handle_client(client_socket):
     password = client_socket.recv(1024).decode().strip()
 
     # Check if the credentials are correct
-    if username == VALID_USERNAME and password == VALID_PASSWORD:
-        client_socket.send(b"Login successful! Welcome to the system.\n")
+    if username in VALID_USERNAME and password in VALID_PASSWORD:
+        response = f"Login successful! for {username} Welcome to the system.\n"
+        client_socket.send(response.encode())
+
     else:
         client_socket.send(b"Login failed! Invalid credentials.\n")
 
