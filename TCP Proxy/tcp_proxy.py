@@ -98,10 +98,13 @@ def modify_text_messages(buffer, is_request):
             data = data.replace("username", "attacker_user")
         elif "password" in data.lower():
             data = data.replace("password", "attacker_pass")
+
+        print(f"\n[DEBUG] Original data: {data}")
     else:
         # Modify server responses
         data = data.replace("Login Page", "Secure Login Page")
         data = data.replace("Enter password:", "Enter your secret password:")
+        print(f"\n[DEBUG] Original data: {data}")
     
     return data.encode('utf-8')
 
