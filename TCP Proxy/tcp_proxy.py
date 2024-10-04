@@ -178,11 +178,11 @@ def server_loop(local_host, local_port, remote_host, remote_port, receive_fist):
 
 
 
-def add_iptables_rule():
+def add_iptables_rule(remote_port, local_port):
     # Add iptables rule to redirect traffic from port 8080 to 9090
     try:
         subprocess.run(['sudo', 'iptables', '-t', 'nat', '-A', 'PREROUTING',
-                        '-p', 'tcp', '--dport', '8080', '-j', 'REDIRECT', '--to-port', '9090'],
+                        '-p', 'tcp', '--dport', remote_port, '-j', 'REDIRECT', '--to-port', local_port],
                        check=True)
         print("[*] iptables rule added: forwarding port 8080 to 9090")
     except subprocess.CalledProcessError as e:
@@ -199,10 +199,10 @@ def remove_iptables_rule(remote_port, local_port):
     except subprocess.CalledProcessError as e:
         print(f"[!!] Failed to remove iptables rule: {e}")
 
-def signal_handler(sig, frame):
+def signal_handler(sig, frame, remote_port, local_port):
     # When the proxy is stopped (CTRL+C), remove the iptables rule and exit
     print("\n[*] Proxy stopping...")
-    remove_iptables_rule()
+    remove_iptables_rule(remote_port, local_port)
     sys.exit(0)
 
 # Your main function
@@ -228,7 +228,7 @@ def main():
     add_iptables_rule(remote_port, local_port)
     
     # Ensure iptables rule is removed when proxy stops
-    signal.signal(signal.SIGINT, signal_handler)  # Capture CTRL+C
+    signal.signal(signal.SIGINT, signal_handler(remote_port, local_port))  # Capture CTRL+C
     
     # Start the proxy (your existing server loop here)
     server_loop(local_host, local_port, remote_host, remote_port, receive_first)
