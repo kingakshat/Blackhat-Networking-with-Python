@@ -182,7 +182,7 @@ def add_iptables_rule(remote_port, local_port):
     # Add iptables rule to redirect traffic from port 8080 to 9090
     try:
         subprocess.run(['sudo', 'iptables', '-t', 'nat', '-A', 'PREROUTING',
-                        '-p', 'tcp', '--dport', remote_port, '-j', 'REDIRECT', '--to-port', local_port],
+                        '-p', 'tcp', '--dport', str(remote_port), '-j', 'REDIRECT', '--to-port', str(local_port)],
                        check=True)
         print("[*] iptables rule added: forwarding port 8080 to 9090")
     except subprocess.CalledProcessError as e:
@@ -193,7 +193,7 @@ def remove_iptables_rule(remote_port, local_port):
     # Remove iptables rule to stop redirecting traffic from port 8080 to 9090
     try:
         subprocess.run(['sudo', 'iptables', '-t', 'nat', '-D', 'PREROUTING',
-                        '-p', 'tcp', '--dport', remote_port, '-j', 'REDIRECT', '--to-port', local_port],
+                        '-p', 'tcp', '--dport', str(remote_port), '-j', 'REDIRECT', '--to-port', str(local_port)],
                        check=True)
         print("[*] iptables rule removed")
     except subprocess.CalledProcessError as e:
