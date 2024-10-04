@@ -227,11 +227,11 @@ def main():
     # Add the iptables rule on start
     add_iptables_rule(remote_port, local_port)
     
-    # Ensure iptables rule is removed when proxy stops
-    signal.signal(signal.SIGINT, signal_handler("0", "0", remote_port, local_port))  # Capture CTRL+C
-    
     # Start the proxy (your existing server loop here)
     server_loop(local_host, local_port, remote_host, remote_port, receive_first)
+
+    # Ensure iptables rule is removed when proxy stops
+    signal.signal(signal.SIGINT, signal_handler("0", "0", remote_port, local_port))  # Capture CTRL+C
 
 if __name__ == '__main__':
     main()
